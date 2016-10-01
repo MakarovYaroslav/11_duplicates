@@ -1,7 +1,7 @@
 import os
 
 
-def are_files_duplicates(file_path_1, file_path_2):
+def files_have_same_size(file_path_1, file_path_2):
     file_size_1 = os.path.getsize(file_path_1)
     file_size_2 = os.path.getsize(file_path_2)
     if file_size_1 == file_size_2:
@@ -9,11 +9,11 @@ def are_files_duplicates(file_path_1, file_path_2):
     return False
 
 
-def is_name_in_list(paths_list, filename):
+def find_name_in_list(paths_list, filename):
     for path in paths_list:
         if filename in path:
-            return True, path
-    return False
+            return path
+    return None
 
 if __name__ == '__main__':
     all_paths = []
@@ -21,10 +21,9 @@ if __name__ == '__main__':
         for f in files:
             full_path = os.path.join(d, f)
             file_name = os.path.basename(full_path)
-            check_name = is_name_in_list(all_paths, file_name)
-            if check_name is not False:
-                file_path_from_list = check_name[1]
-                if are_files_duplicates(full_path, file_path_from_list):
+            file_path_from_list = find_name_in_list(all_paths, file_name)
+            if file_path_from_list is not None:
+                if files_have_same_size(full_path, file_path_from_list):
                     print('Дубликаты:\n%s\n%s' % (
                         full_path, file_path_from_list
                     ))
